@@ -6,18 +6,16 @@ const NoteState = (props) => {
     const [notes, setNotes] = useState([]);
 
     const getNotes = async () => {
-        try {
-            const response = await fetch(`${host}/note/list`, { method: 'POST' });
-            const json = await response.json();
-
-            if (Array.isArray(json.notes)) {
-                setNotes(json.notes);
-            } else {
-                console.error('API response does not contain an array of notes:', json);
-            }
-        } catch (error) {
-            console.error('Failed to fetch notes:', error);
-        }
+        const response = await fetch(`${host}/note/list`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'auth-token': localStorage.getItem('token')
+                },
+            });
+        const json = await response.json();
+        setNotes(json);
     };
 
     const addNote = async (title, description, tag) => {
@@ -27,7 +25,7 @@ const NoteState = (props) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NmE5OGE4OTRlZDlhMmQ5M2U1ZTNjNSIsImVtYWlsIjoiYWtzaGl0amFhdDk5QHlvcG1haWwuY29tIiwiaWF0IjoxNzE4MjYzNDkzLCJleHAiOjE3MTkxMjc0OTN9.GR4zWh6N4Zy2MuNPPBx1P-Slo4z_oU5vtYK6XOM2SHg'
+                    'auth-token': localStorage.getItem('token')
                 },
                 body: JSON.stringify(payload),
             });

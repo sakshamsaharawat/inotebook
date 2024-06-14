@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
-import { Link, useLocation } from "react-router-dom";
+import React from 'react'
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-    let location = useLocation();
-    useEffect(() => {
-    }, [location]);
+    const navigate = useNavigate()
+    const handleLogout = () => {
+        localStorage.clear();
+        navigate('/login')
+    }
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -16,16 +18,16 @@ const Navbar = () => {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <Link className={`nav-link ${location.pathname === "/" ? "active" : ""}`} aria-current="page" to="/">Home</Link>
+                                <NavLink className="nav-link" exact="true" activeclassname="active" aria-current="page" to="/">Home</NavLink>
                             </li>
                             <li className="nav-item">
-                                <Link className={`nav-link ${location.pathname === "/about" ? "active" : ""}`} to="About">About</Link>
+                                <NavLink className="nav-link" exact="true" activeclassname="active" to="About">About</NavLink>
                             </li>
                         </ul>
-                        <form className="d-flex" role="search">
-                            <Link className="btn btn-primary mx-2" to="login" role="button">Login</Link>
-                            <Link className="btn btn-primary mx-2" to="signup" role="button">signup</Link>
-                        </form>
+                        {localStorage.getItem('token') ? <button onClick={handleLogout} className='btn btn-primary mx-2'> Logout</button>
+                            : <> <Link className="btn btn-primary mx-2" to="login" role="button">Login</Link>
+                                <Link className="btn btn-primary mx-2" to="signup" role="button">signup</Link></>
+                        }
                     </div>
                 </div>
             </nav>

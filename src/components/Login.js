@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const Login = () => {
+const Login = (props) => {
     const host = 'http://localhost:4000';
     const [credentials, setCredentials] = useState({ email: "", password: "" })
     let navigate = useNavigate()
@@ -14,14 +14,15 @@ const Login = () => {
             body: JSON.stringify({ email: credentials.email, password: credentials.password }),
         });
         const json = await response.json()
-        console.log(json, "-------------------")
         if (json.success) {
             // save the auth token and redirect
             localStorage.setItem('token', json.token);
+            props.showAlert("Logged in successfully ", "success")
             navigate("/");
+
         }
         else {
-            alert("Invalid Credentials")
+            props.showAlert("Invalid credentials")
         }
     }
     const onChange = (e) => {
@@ -32,20 +33,16 @@ const Login = () => {
         <div>
             <form onSubmit={handleSubmit} >
                 <div className='container my-5'>
-                    <div class="form-group ">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control " value={credentials.email} name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" onChange={onChange} />
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    <div className="form-group ">
+                        <label htmlFor="exampleInputEmail1">Email address</label>
+                        <input type="email" className="form-control " value={credentials.email} name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" onChange={onChange} />
+                        <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" value={credentials.password} name="password" id="exampleInputPassword1" placeholder="Password" onChange={onChange} />
+                    <div className="form-group">
+                        <label htmlFor="exampleInputPassword1">Password</label>
+                        <input type="password" className="form-control" value={credentials.password} name="password" id="exampleInputPassword1" placeholder="Password" onChange={onChange} />
                     </div>
-                    <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" className="btn btn-primary my-3">Submit</button>
                 </div>
             </form>
         </div>
